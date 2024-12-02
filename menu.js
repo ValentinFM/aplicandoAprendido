@@ -18,11 +18,13 @@ function menuEditar() {
     let opcion2 = parseInt(prompt("Ingrese la opcion:"));
     return opcion2;
 }
+
 function menuBuscar() {
     console.log("MENU\n[1] Nombre \n[2] ID \n[3] Estado\n[0] Salir");
     let opcion3 = parseInt(prompt("Ingrese la opcion:"));
     return opcion3;
 }
+
 //EXPORTO FUNCIONES PARA PODER USAR EN CUALQUIER ARCHIVO
 module.exports = {
     menuPrincipal,

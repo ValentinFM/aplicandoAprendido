@@ -27,11 +27,6 @@ function crearTarea(tareas) {
     mostrarDetallesTarea(nuevaTarea);
 }
 
-//funcion para modificar tarea
-/*function modificarTarea() {
-
-}*/
-
 function mostrarDetallesTarea(tarea) {
     console.log("Ejecutando mostrarDetallesTarea...");
     console.log(tarea);
@@ -54,7 +49,7 @@ function mostrarTodasLasTareas(tareas) {
     (opcion > 0 && opcion <= tareas.length)
         ? (
             mostrarDetallesTarea(tareas[opcion - 1]),
-            prompt(`¿Desea editar esta tarea? (S/N): `).toUpperCase() === 'S'
+            prompt(`¿Desea editar esta tarea? (S/N) : `).toUpperCase() === 'S'
                 ? editarTarea(tareas[opcion - 1])
                 : null
         )
@@ -126,7 +121,6 @@ function editarTarea(tarea) {
 //EXPORTO FUNCIONES PARA PODER USAR EN CUALQUIER ARCHIVO
 module.exports = {
     crearTarea,
-    modificarTarea,
     mostrarTodasLasTareas,
     editarTarea,
     mostrarDetallesTarea

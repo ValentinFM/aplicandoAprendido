@@ -1,6 +1,6 @@
 const prompt = require('prompt-sync')({ sigint: true });
 const { validarInicialDificultad } = require('./control');
-const { mostrarDetallesTarea } = require('./funcionesTareas');
+const { editarTarea } = require('./funcionesTareas');
 console.log(mostrarDetallesTarea);
 
 function solicitarId() {
@@ -32,10 +32,21 @@ function seleccionarOpcion(resultados) {
             console.log("\nDetalles de la tarea selecionada"),
             mostrarDetallesTarea(tareaSeleccionada),//NO FUNCA no se pasa correctamente la funcion
             opcion2 = parseInt(prompt("¿Desea editar la tarea?S/N")),
-            opcion2 === S ? editarTarea(tareaSeleccionada) : opcion = 0)
+            opcion2 === 'S' ? editarTarea(tareaSeleccionada) : opcion = 0)
         : opcion === 0
             ? (console.log("Regresando al menú..."), null)
             : (console.log("Opción no válida."), seleccionarOpcion());
+}
+function mostrarDetallesTarea(tarea) {
+    console.log("Ejecutando mostrarDetallesTarea...");
+    console.log(tarea);
+    console.log(`   Título: ${tarea.titulo}`);
+    console.log(`   Descripción: ${tarea.descripcion}`);
+    console.log(`   Estado: ${tarea.estado}`);
+    console.log(`   Dificultad: ${tarea.dificultad}`);
+    console.log(`   Fecha de creación: ${tarea.creacion}`);
+    console.log(`   Fecha de vencimiento: ${tarea.vencimiento}`);
+    console.log(`   Fecha de ultima modificacion: ${tarea.fechaModificacion}`);
 }
 module.exports = {
     solicitarDificultad,

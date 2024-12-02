@@ -7,7 +7,7 @@ const { esperarTeclaParaContinuar } = require('./control');
 const { solicitarNombre, solicitarId } = require('./solicita');
 const { buscarTareaId, buscarTareaPorEstado, buscarTareaPorNombre } = require('./buscar');
 
-const { } = require('./buscar');
+//const { } = require('./buscar');
 ///COMIENZA EL CODIGO
 let tareas = [];
 function ejecutarMenu() {
