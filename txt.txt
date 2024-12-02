@@ -1,0 +1,34 @@
+1-Programacion Estructurada
+* Utiliza comentarios para agregar claridad al código sobre el propósito que cumple.
+* Mantiene el código legible usando sangrías.
+* Utiliza funciones para mantener el código reutilizable, y legible.
+* Evita el uso de variables globales.
+* Aplica modularización siempre que se pueda.
+
+
+2-Programacion Orientada a Objetos
+* Debes asegurarte que todos los bloques de código que hagan uso de OOP tengan nombres significativos y 
+acorde a la tarea que realizan. Todos los métodos deben seguir la convención de nomenclatura orientada a 
+acciones y las declaraciones de clases deben referir a conceptos o entidades.
+* El diseño de nuestro código debe asegurar que una clase sea responsable sólo de una tarea en particular, 
+por lo que si existe una clase que realiza más de
+* Aplica modularización. Cada clase debe ir en su propio archivo.
+* Intenta reducir las sentenci una tarea, debe dividirse.
+* Escribe métodos que usen la mínima cantidad de argumentos posible.
+* Evita el comportamiento global y no determinista. En el mismo sentido, intenta reducir el uso de métodos 
+estáticos.as condicionales tanto como sea posible. Intenta reemplazarlas por interfaces 
+y/o clases abstractas e implementar la lógica condicional en diferentes métodos que pueden ser reutilizados.
+
+
+3-Programacion Funcional
+* Tus funciones deben ser puras, y cuando no puedas hacerlas puras, recuerda mantener el equilibrio 70/30: 
+70% de tus funciones deben ser puras.
+* Evita el uso de bucles.
+* Aprovecha los conceptos de composición de funciones.
+
+
+Menu{variosMenus}
+FuncionesTarea {crearTarea, modificarTarea, mostrarTarea, buscarTarea}
+Index{llamada a Menu y funcionesTarea}
+Tarea{es la clase de tarea con atributos, metodos y constructor}
+Controles{Controles necesarios}
