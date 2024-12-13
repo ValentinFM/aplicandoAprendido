@@ -1,4 +1,4 @@
-class Tarea {
+class Tarea {//creamos los atributos de la tarea //TODO PURO
     // Atributos de Tarea
     id;
     titulo;
@@ -9,12 +9,12 @@ class Tarea {
     dificultad;
     fechaModificacion;
 
-    // Contador privado estático
+    // Contador privado estático, esto para que no pueda modificarse
     static #contadorTarea = 1;
 
     // Constructor de Tarea
     constructor(titulo, descripcion, estado, dificultad, vencimiento) {
-        this.id = Tarea.#contadorTarea++; // Asigna el valor actual del contador y luego lo incrementa
+        this.id = Tarea.#contadorTarea++; // Asigna el valor actual del contador y luego lo incrementamos para llevar el id de la tarea
         this.titulo = titulo;
         this.descripcion = descripcion;
         this.estado = estado;
@@ -23,10 +23,12 @@ class Tarea {
         this.dificultad = dificultad;
         this.fechaModificacion = this.creacion;
     }
+
     //getters
     getId() {
         return this.id;
     }
+
     getTitulo() {
         return this.titulo;
     }
@@ -50,10 +52,8 @@ class Tarea {
     getVencimiento() {
         return this.vencimiento;
     }
-
-    actualizarModificacion() {
-        this.fechaModificacion = new Date();
-    }
 };
-//EXPORTO FUNCIONES PARA PODER USAR EN CUALQUIER ARCHIVO
-module.exports = { Tarea };
+
+export {
+    Tarea
+};

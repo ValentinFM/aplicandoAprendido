@@ -1,57 +1,64 @@
-//IMPORTAMOS PROMPT PARA PODER INGRESAR TEXTO POR TECLADO
-const prompt = require('prompt-sync')({ sigint: true });
-//IMPORTAMOS MODULO DE MENU, FUNCIONESTAREA, CLASE TAREA Y CONTROLES
-const { menuPrincipal, menuBuscar, menuSecundario } = require('./menu');
-const { crearTarea, mostrarTodasLasTareas } = require('./funcionesTareas');
-const { esperarTeclaParaContinuar } = require('./control');
-const { solicitarNombre, solicitarId } = require('./solicita');
-const { buscarTareaId, buscarTareaPorEstado, buscarTareaPorNombre } = require('./buscar');
+import { buscarTareaId, buscarTareaPorEstado, buscarTareaPorNombre } from './buscar.js';//Importo funciones de el archivo buscar
+import { crearTarea } from './funcionesTareas.js';//Importo funciones de el archivo funcionesTarea
+import { solicitarNombre } from './solicitando.js';//Importo funciones de el archivo solicitando
+import { mostrarTodasLasTareas } from './mostrar.js';//Importo funciones de el archivo mostrar
+import { menuPrincipal, menuSecundario, menuBuscar } from './menu.js';//Importo funciones de el archivo menu
+import { convertirMenuEstado, convertirTextoEstado } from './control.js';//Importo funciones de el archivo control
+import { mensajesIndex, esperarTeclaParaContinuar, LimpiarPantalla } from './comunicacion.js';//Importo funciones de el archivo comunicacion
 
-//const { } = require('./buscar');
-///COMIENZA EL CODIGO
-let tareas = [];
-function ejecutarMenu() {
+// todo puro
+//COMIENZA EL CODIGO
+let tareas = [];//creo arreglo de tareas
 
-    switch (menuPrincipal()) {
+function ejecutarMenu() {//Funcion que ejecuta el menu
+    LimpiarPantalla();
+    switch (menuPrincipal()) {//este switch tiene como parametro la funcion menuPrincipal
         case 1://ver tareas
-            console.clear();
-            tareas.length === 0 ? console.log("No hay tareas creadas") : mostrarTodasLasTareas(tareas);
-            esperarTeclaParaContinuar();
-            console.clear();
-            ejecutarMenu();
+            tareas.length === 0 ? mensajesIndex(1) : mostrarTodasLasTareas(tareas);//si es igual a 0 no hay tareas, si es otro valor entonces muestra las tareas
+            esperarTeclaParaContinuar();//funcion con console.clear
+            LimpiarPantalla();//funcion de limpiar pantalla
+            ejecutarMenu();//funcion que ejecuta el menu
             break;
         case 2://buscar tarea
-            switch (menuBuscar()) {
+            switch (menuBuscar()) {//este switch tiene como parametro la funcion menuBuscar
                 case 1:
-                    let nombre = solicitarNombre();
-                    buscarTareaPorNombre(tareas, nombre);
+                    let nombre = solicitarNombre();//pedimos el nombre para pasarlo como parametro
+                    buscarTareaPorNombre(tareas, nombre);//le pasamos como parametros el arreglo y el nombre, para que pueda usarse en la funcion
                     break;
                 case 2:
-                    let Id = solicitarId();
-                    buscarTareaId(Id);
+                    //let Id
+                    buscarTareaId(tareas);//le paso el arreglo tareas para que la busque por ID
                     break;
                 case 3:
-                    let estado = menuSecundario();
-                    buscarTareaPorEstado(estado);
+                    let estado = menuSecundario();//creo una variable estado del menuSecundario
+                    estado > 1 ?//si es mayor a 1 entonces convierte el menu al estado y despues pasarlo a texto
+                        (estado = convertirMenuEstado(estado),
+                            estado = convertirTextoEstado(estado),
+                            buscarTareaPorEstado(tareas, estado),
+                            esperarTeclaParaContinuar()) : mostrarTodasLasTareas(tareas);//si no, muestra todas las  tareas
                     break;
             }
-            ejecutarMenu();
+            ejecutarMenu();//ejecuta el menu al salir del switch interno
             break;
         case 3://agregar tarea
-            crearTarea(tareas);
-            esperarTeclaParaContinuar();
-            ejecutarMenu();
-            console.clear();
+            crearTarea(tareas);//creamos la tarea pasandole el arreglo de tareas como atributo
+            esperarTeclaParaContinuar();//funcion de esperar tecla
+            ejecutarMenu();//ejecutamos el menu para empezar
+            LimpiarPantalla();//limpiamos pantalla
             break;
-        case 0:
-            console.log("Saliendo del Programa\n");
+        case 0://salimos del programa
+            mensajesIndex(2);
             break;
         default:
-            console.clear();
-            console.log("ERROR, opcion incorrecta \n");
+            mensajesIndex(3);
             ejecutarMenu();
             break;
     }
 }
-ejecutarMenu();
-module.exports = { tareas };
+
+ejecutarMenu();//ejecutamos el menu denuevo para evitar el while de manera recursiva
+
+export {
+    tareas,
+    ejecutarMenu
+};//exportamos para poder usar en otros archivos

@@ -1,127 +1,103 @@
-const { Tarea } = require('./claseTarea');
-const { validarInicialDificultad, validarFecha, validarInicialEstado, AtributoEnBlanco, convertirTextoEstado, convertirTextoDificultad, RepetirAtributo, validarLongitudString } = require('./control');
-const { solicitarDificultad } = require('./solicita');
-//IMPORTAMOS PROMPT PARA PODER INGRESAR TEXTO POR TECLADO
-const prompt = require('prompt-sync')({ sigint: true });
-//funcion para crear tarea  -IMPURA-
+import { Tarea } from './claseTarea.js'//Importo funciones de el archivo claseTarea
+import { solicitarDificultad } from './solicitando.js';//Importo funciones de el archivo solicitando
+import { mostrarDetallesTarea } from './mostrar.js';//Importo funciones de el archivo mostrar
+import { convertirDificultadATexto, convertirEstadoInicial, ValidarDescripcion, AtributoEnBlanco, RepetirAtributo, ValidarTitulo, convertirTextoEstado, convertirTextoDificultad, validarFecha, validarInicialEstado, validarInicialDificultad } from './control.js';//Importo funciones de el archivo control
+import { LimpiarPantalla } from './comunicacion.js';//Importo funciones de el archivo comunicacion
+import { mensajesfuncionesTareas, pedirDato } from './comunicacion.js';
+
+//todo impuro
+//funcion para crear tarea que recibe como parametro el arreglos tareas
 function crearTarea(tareas) {
-    console.clear();
-    let estado = 'P', dificultad = '', titulo, descripcion, vencimiento, creacion;
-    console.log("AGREGAR TAREA\n");
+    LimpiarPantalla();
+    let estado = 'P', dificultad = '', titulo, descripcion, vencimiento, creacion; //inicializamos variables
+    mensajesfuncionesTareas(1);
+    titulo = pedirDato();
 
-    titulo = prompt('Título de la tarea (máx. 100 caracteres): ');
+    mensajesfuncionesTareas(2);
+    descripcion = pedirDato();
 
-    descripcion = prompt('Descripción de la tarea: ');
-    validarInicialEstado(estado);
-    estado = convertirTextoEstado(estado);
+    validarInicialEstado(estado);//validamos el estado para poder convertirlo
+    estado = convertirTextoEstado(estado);//convertimos el estado
 
     dificultad = solicitarDificultad();
-    dificultad = convertirTextoDificultad(dificultad);
 
-    vencimiento = prompt('Fecha de vencimiento (YYYY-MM-DD): ');
+    mensajesfuncionesTareas(3);
+    vencimiento = pedirDato();
 
-    fechaModificacion = new Date();
+    let fechaModificacion = new Date();
     let nuevaTarea = new Tarea(titulo, descripcion, estado, dificultad, vencimiento, fechaModificacion, creacion);
-    tareas.push(nuevaTarea);
-    console.log("Tarea creada con éxito");
-    mostrarDetallesTarea(nuevaTarea);
+
+    tareas.push(nuevaTarea);//ingresamos la tarea creada al arreglo
+    mensajesfuncionesTareas(4);
+    mostrarDetallesTarea(nuevaTarea);//mostramos los detalles de esa tarea
 }
 
-function mostrarDetallesTarea(tarea) {
-    console.log("Ejecutando mostrarDetallesTarea...");
-    console.log(tarea);
-    console.log(`   Título: ${tarea.titulo}`);
-    console.log(`   Descripción: ${tarea.descripcion}`);
-    console.log(`   Estado: ${tarea.estado}`);
-    console.log(`   Dificultad: ${tarea.dificultad}`);
-    console.log(`   Fecha de creación: ${tarea.creacion}`);
-    console.log(`   Fecha de vencimiento: ${tarea.vencimiento}`);
-    console.log(`   Fecha de ultima modificacion: ${tarea.fechaModificacion}`);
-}
-
-function mostrarTodasLasTareas(tareas) {
-    console.log(`Todas las tareas:`);
-    tareas.forEach((tarea, index) => {
-        console.log(`[${index + 1}] :  Título: ${tarea.titulo}`);
-    });
-
-    let opcion = parseInt(prompt(`Ingrese el índice de la tarea para ver detalles (0 para regresar al menú): `));
-    (opcion > 0 && opcion <= tareas.length)
-        ? (
-            mostrarDetallesTarea(tareas[opcion - 1]),
-            prompt(`¿Desea editar esta tarea? (S/N) : `).toUpperCase() === 'S'
-                ? editarTarea(tareas[opcion - 1])
-                : null
-        )
-        : opcion === 0
-            ? console.log(`Regresando al menú...`)
-            : console.log(`Opción no válida.`);
-}
-
-function editarTarea(tarea) {
-    console.clear();
-    console.log(`Editando tarea...`);
-    console.log(`IMPORTANTE\nSi no desea cambiar un dato ingrese '='\nSi desea dejarlo en blanco presione Enter...\n\n`);
-
-    let nuevoTitulo = ``, nuevaDescripcion = ``, nuevoEstado = ``, nuevaDificultad = ``, nuevoVencimiento = ``, inicial = ``;
+function editarTarea(tarea) {//funcion para editar tarea
+    LimpiarPantalla();
+    mensajesfuncionesTareas(5);
+    mensajesfuncionesTareas(6);
+    let nuevoTitulo = ``, nuevaDescripcion = ``, nuevoEstado = ``, nuevaDificultad = ``, nuevoVencimiento = ``, inicial = ``;//inicializamos todo 
 
     // Editar el título
-    nuevoTitulo = prompt(`Nuevo título (anterior: ${tarea.titulo}): `);
-    while (nuevoTitulo === '') {
-        nuevoTitulo = prompt(`El título no puede estar vacío. Ingrese un título:`);
-    }
-    nuevoTitulo = RepetirAtributo(nuevoTitulo, tarea.titulo);
+    console.log(`Nuevo título (anterior: ${tarea.titulo}): `);
+    nuevoTitulo = pedirDato();
+    nuevoTitulo = ValidarTitulo(nuevoTitulo, tarea.titulo);//validamos el nuevo titulo
 
     // Editar la descripción
-    nuevaDescripcion = prompt(`Nueva descripción (anterior: ${tarea.descripcion}): `);
-    while (validarLongitudString(nuevaDescripcion, 500)) {
-        nuevaDescripcion = prompt(`La descripción es demasiado larga. Ingrese nuevamente la descripción:`);
-    }
-    nuevaDescripcion = AtributoEnBlanco(nuevaDescripcion);
-    nuevaDescripcion = RepetirAtributo(nuevaDescripcion, tarea.descripcion);
+    console.log(`Nueva descripción (anterior: ${tarea.descripcion}): `);
+    nuevaDescripcion = pedirDato();
+    nuevaDescripcion = ValidarDescripcion(nuevaDescripcion, tarea.descripcion);//validamos la nueva descripcion
 
     // Editar el estado
-    inicial = prompt(`Nuevo estado (anterior: ${tarea.estado}) [P]endiente, [E]n curso, [T]erminada, [C]ancelada: `);
+    console.log(`Nuevo estado (anterior: ${tarea.estado}) [P]endiente, [E]n curso, [T]erminada, [C]ancelada: `);
+    inicial = pedirDato();
     while (!validarInicialEstado(inicial) && inicial !== '=') {
-        inicial = prompt(`Entrada inválida. Ingrese una opción válida ([P]endiente, [E]n curso, [T]erminada, [C]ancelada), o deje en blanco:`);
-    }
-    inicial === '' ? inicial = 'P' : inicial;
-    inicial = RepetirAtributo(inicial, tarea.estado);
-    nuevoEstado = convertirTextoEstado(inicial);
+        mensajesfuncionesTareas(7);
+        inicial = pedirDato();
+    }//LO VAMOS A DEJAR CON EL WHILE?
+    inicial === '' ? inicial = 'P' : inicial;//si es vacia, se le pone pendiente, si no, colocamos la incial ingresada
+    tarea.estado = convertirEstadoInicial(tarea.estado);//hacemos que se complete la palabra con el convertir estado
+    inicial = RepetirAtributo(inicial, tarea.estado);//si el valor no lo cambiamos queda el mismo, si no, modificamos al nuevo
+    nuevoEstado = convertirTextoEstado(inicial);//nuesvo estado que convertimos a texto
 
     // Editar la dificultad
-    inicial = prompt(`Nueva dificultad (anterior: ${tarea.dificultad}) ([1] Baja, [2] Media, [3] Alta): `);
+    console.log(`Nueva dificultad (anterior: ${tarea.dificultad}) ([1] Baja, [2] Media, [3] Alta): `);
+    inicial = pedirDato();
     while (!validarInicialDificultad(inicial) && inicial !== '=') {
-        inicial = prompt(`Entrada inválida. Ingrese una opción válida ([1] Baja, [2] Media, [3] Alta): `);
-    }
-    inicial === '' ? inicial = '1' : inicial;
-    inicial = RepetirAtributo(inicial, tarea.dificultad);
-    nuevaDificultad = convertirTextoDificultad(inicial);
+        mensajesfuncionesTareas(8);
+        inicial = pedirDato();
+    }//LO VAMOS A DEJAR CON EL WHILE?
+    inicial === '' ? inicial = '1' : inicial;//si no ingresa nada, entonces la inical es 1, si no, ponemos la incial ingresada
+    tarea.dificultad = convertirDificultadATexto(tarea.dificultad);//convertimos la dificultad a texto
+    inicial = RepetirAtributo(inicial, tarea.dificultad);//corroboramos si se repite el atributo, si no modificamos
+    nuevaDificultad = convertirTextoDificultad(inicial);//convertimos dificultad a emoji
 
     // Editar la fecha de vencimiento
-    nuevoVencimiento = prompt(`Nueva fecha de vencimiento (anterior: ${tarea.vencimiento}): `);
+    console.log(`Nueva fecha de vencimiento (anterior: ${tarea.vencimiento}): `);
+    nuevoVencimiento = pedirDato();
     while (!validarFecha(nuevoVencimiento) && nuevoVencimiento !== '' && nuevoVencimiento !== '=') {
-        nuevoVencimiento = prompt(`Fecha inválida. Ingrese una fecha válida en formato YYYY-MM-DD.`);
-    }
-    nuevoVencimiento = AtributoEnBlanco(nuevoVencimiento);
-    nuevoVencimiento = RepetirAtributo(nuevoVencimiento, tarea.vencimiento);
+        mensajesfuncionesTareas(9);
+        nuevoVencimiento = pedirDato();
+    }//LO VAMOS A DEJAR CON EL WHILE?
+    nuevoVencimiento = AtributoEnBlanco(nuevoVencimiento);//corroboramos si se dejo en blanco
+    nuevoVencimiento = RepetirAtributo(nuevoVencimiento, tarea.vencimiento);//repetimos si es igual q antes, si no, ponemos el nuevo
+
     // Actualizar la tarea
     tarea.titulo = nuevoTitulo;
     tarea.descripcion = nuevaDescripcion;
     tarea.estado = nuevoEstado;
     tarea.dificultad = nuevaDificultad;
     tarea.vencimiento = nuevoVencimiento;
-    tarea.fechaModificacion = new Date();
-
-    console.log(`\n\nTarea actualizada con éxito!`);
-
+    actualizarModificacion(tarea);
+    mensajesfuncionesTareas(10);
     mostrarDetallesTarea(tarea);
 }
 
-//EXPORTO FUNCIONES PARA PODER USAR EN CUALQUIER ARCHIVO
-module.exports = {
+function actualizarModificacion(tarea) {
+    tarea.fechaModificacion = new Date();
+}
+
+export {
     crearTarea,
-    mostrarTodasLasTareas,
-    editarTarea,
-    mostrarDetallesTarea
-};
+    editarTarea
+};//exportamos funciones para poder usar en otro archivo
