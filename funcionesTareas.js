@@ -11,8 +11,10 @@ function crearTarea(tareas) {
     LimpiarPantalla();
     let estado = 'P', dificultad = '', titulo, descripcion, vencimiento, creacion; //inicializamos variables
     mensajesfuncionesTareas(1);
-    titulo = pedirDato();
 
+    titulo = pedirDato();
+    titulo=ValidarTitulo(titulo, '');
+    
     mensajesfuncionesTareas(2);
     descripcion = pedirDato();
 
@@ -99,5 +101,6 @@ function actualizarModificacion(tarea) {
 
 export {
     crearTarea,
-    editarTarea
+    editarTarea,
+    actualizarModificacion
 };//exportamos funciones para poder usar en otro archivo

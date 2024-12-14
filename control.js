@@ -1,5 +1,5 @@
 import { mensajesControl, pedirDato } from './comunicacion.js';//Importo funciones de el archivo comunicacion
-// todo puro, no sabemos lo de la fecha
+// todo puro
 //CONTROLES 
 function AtributoEnBlanco(dato) {//pasamos como paramtro el dato y corroboramos que sea blanco o no
     return dato === '' ? true : dato;
@@ -15,14 +15,14 @@ function ValidarDescripcion(nuevaDescripcion, descripcion) {//validamos la descr
             nuevaDescripcion = pedirDato(),//ingresamos nueva descripcion
             ValidarDescripcion(nuevaDescripcion, descripcion))//la validamos
 }
-
+//impuro
 function ValidarTitulo(nuevoTitulo, titulo) {//validamos el titulo con el nuevo y el anterior, es lo mismo que con descripcion pero con 100 caracteres
     return AtributoEnBlanco(nuevoTitulo) === nuevoTitulo ?
         validarLongitudString(nuevoTitulo, 100) ?
             RepetirAtributo(nuevoTitulo, titulo) : (mensajesControl(2),
                 nuevoTitulo = pedirDato(),
                 ValidarTitulo(nuevoTitulo, titulo)) :
-        (mensajesControl(3), ValidarTitulo(nuevoTitulo, titulo))
+        (mensajesControl(3), nuevoTitulo=pedirDato(), ValidarTitulo(nuevoTitulo, titulo))
 }
 
 function convertirTextoEstado(inicial) {//convertimos las letras a el estado completo Mapeo
@@ -65,6 +65,7 @@ function convertirTextoDificultad(inicial) {//convertimos la incial de la dificu
         '1': 'Bajo ⭐ ☆ ☆',
         '2': 'Medio ⭐ ⭐ ☆',
         '3': 'Alto ⭐ ⭐ ⭐',
+        '': 'Bajo ⭐ ☆ ☆',
     };
     return dificultad[inicial];//Si no hay coincidencia, devuleve el valor original
 }
