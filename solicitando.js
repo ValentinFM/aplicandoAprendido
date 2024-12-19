@@ -32,13 +32,13 @@ function solicitarDificultad() {//funcion que solicita la dificultad de la tarea
 function seleccionarOpcion(resultados) {//funcion que toma como parametro resultados, es usada para seleccionar las opciones
     let tareaSeleccionada, opcion2;
     mensajesSolicitando(6);
-    let opcion = pedirDatoNumerico;
-    opcion > 0 && opcion <= resultados.length//
+    let opcion = pedirDatoNumerico();
+    opcion > 0 && opcion <= resultados.length
         ? (tareaSeleccionada = resultados[opcion - 1],
             mensajesSolicitando(7),
             mostrarDetallesTarea(tareaSeleccionada),
             mensajesSolicitando(8),
-            opcion2 = prompt(),
+            opcion2 = pedirDato(),
             opcion2 === 'S' ? editarTarea(tareaSeleccionada) : opcion = 0)
         : opcion === 0
             ? (mensajesSolicitando(9), null)
